@@ -8,6 +8,13 @@ data class HeroDTO(
         @field:Json(name = "id") val id: Int,
         @field:Json(name = "name") val name: String,
         @field:Json(name = "description") val description: String,
+        @field:Json(name = "thumbnail") val thumbnail: HeroThumbnailDTO,
+)
+
+@JsonClass(generateAdapter = true)
+data class HeroThumbnailDTO(
+        @field:Json(name = "path") val path: String,
+        @field:Json(name = "extension") val extension: String,
 )
 
 @JsonClass(generateAdapter = true)
