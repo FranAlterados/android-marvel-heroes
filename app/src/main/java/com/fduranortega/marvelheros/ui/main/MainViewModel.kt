@@ -22,9 +22,11 @@ class MainViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
 
+    var page = 0
+
     private var fetchJob: Job? = null
 
-    fun fetchHeroes() {
+    fun fetchMoreHeroes() {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             _uiState.update {
@@ -32,7 +34,7 @@ class MainViewModel @Inject constructor(
             }
 
             try {
-                heroListUseCase(0).collect { heroList ->
+                heroListUseCase(page).collect { heroList ->
                     _uiState.update {
                         it.copy(heroList = heroList, isLoading = false)
                     }
@@ -44,6 +46,7 @@ class MainViewModel @Inject constructor(
                     it.copy(errorMessage = message)
                 }
             }
+            page++
         }
     }
 

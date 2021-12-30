@@ -19,6 +19,13 @@ ext.versions = [
     roomVersion          : '2.4.0',
     archCompomentVersion : '2.1.0',
 
+    // glide
+    glideVersion         : '4.12.0',
+    glidePaletteVersion  : '2.1.2',
+
+    // adapter
+    baseAdapter          : '1.0.4',
+
     // moshi
     moshiVersion         : '1.12.0',
 

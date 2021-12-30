@@ -5,8 +5,16 @@ import com.fduranortega.marvelheros.data.model.dto.HeroResponseDTO
 import com.fduranortega.marvelheros.data.model.dto.HeroThumbnailDTO
 import com.fduranortega.marvelheros.data.model.ro.HeroRO
 
+const val HTTP_LABEL = "http:"
+const val HTTPS_LABEL = "https:"
+
 fun HeroThumbnailDTO.getUrlImage(): String {
-    return "$path.$extension"
+    val fixedPath = if (path.startsWith(HTTPS_LABEL)) {
+        path
+    } else {
+        path.replace(HTTP_LABEL, HTTPS_LABEL)
+    }
+    return "$fixedPath.$extension"
 }
 
 fun HeroResponseDTO.toBO(): List<HeroBO> {
