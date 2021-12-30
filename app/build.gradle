@@ -17,7 +17,7 @@ android {
     compileSdk versions.compileSdk
 
     defaultConfig {
-        applicationId "com.fduranortega.marvelheros"
+        applicationId "com.fduranortega.marvelheroes"
         minSdk versions.minSdk
         targetSdk versions.compileSdk
         versionCode versions.versionCode
