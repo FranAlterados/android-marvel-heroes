@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.fduranortega.marvelheroes.data.model.bo.HeroBO
 import com.fduranortega.marvelheroes.databinding.RowHeroBinding
+import com.fduranortega.marvelheroes.ui.detail.DetailActivity
 import com.github.florent37.glidepalette.BitmapPalette
 import com.github.florent37.glidepalette.GlidePalette
 
@@ -49,6 +50,10 @@ class HeroAdapter : RecyclerView.Adapter<HeroAdapter.HeroViewHolder>() {
                         }.crossfade(true)
                 )
                 .into(itemBinding.heroImage)
+
+            itemBinding.root.setOnClickListener {
+                DetailActivity.startActivity(itemBinding.transformationLayout, heroBO)
+            }
         }
     }
 }

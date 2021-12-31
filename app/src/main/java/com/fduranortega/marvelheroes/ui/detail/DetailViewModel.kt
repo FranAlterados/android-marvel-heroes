@@ -1,8 +1,8 @@
-package com.fduranortega.marvelheroes.ui.main
+package com.fduranortega.marvelheroes.ui.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fduranortega.marvelheroes.domain.GetHeroListUseCase
+import com.fduranortega.marvelheroes.domain.GetHeroUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,39 +15,35 @@ import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
-    private val heroListUseCase: GetHeroListUseCase
+class DetailViewModel @Inject constructor(
+    private val heroUseCase: GetHeroUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(MainUiState())
-    val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
-
-    var page = 0
+    private val _uiState = MutableStateFlow(DetailUiState())
+    val uiState: StateFlow<DetailUiState> = _uiState.asStateFlow()
 
     private var fetchJob: Job? = null
 
-    fun fetchMoreHeroes() {
+    fun fetchHero(heroId: Int) {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             _uiState.update {
-                it.copy(isLoading = true, heroList = emptyList(), errorMessage = "")
+                it.copy(isLoading = true, hero = null, errorMessage = "")
             }
 
             try {
-                heroListUseCase(page).collect { heroList ->
+                heroUseCase(heroId).collect { heroBO ->
                     _uiState.update {
-                        it.copy(heroList = heroList, isLoading = false, errorMessage = "")
+                        it.copy(hero = heroBO, isLoading = false)
                     }
                 }
 
             } catch (ioe: IOException) {
                 _uiState.update {
                     val message = ioe.message ?: ""
-                    it.copy(isLoading = false, heroList = emptyList(), errorMessage = message)
+                    it.copy(isLoading = false, hero = null, errorMessage = message)
                 }
             }
-            page++
         }
     }
-
 }

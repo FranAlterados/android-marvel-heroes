@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'kotlin-parcelize'
     id 'dagger.hilt.android.plugin'
 }
 
@@ -65,6 +66,9 @@ android {
 dependencies {
     // android supports
     implementation "com.google.android.material:material:$versions.materialVersion"
+
+    // transformation
+    implementation "com.github.skydoves:transformationlayout:$versions.transformationLayout"
 
     // architecture components
     implementation "androidx.fragment:fragment-ktx:$versions.fragmentVersion"

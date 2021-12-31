@@ -13,6 +13,9 @@ ext.versions = [
     // support library
     materialVersion      : '1.4.0',
 
+    // transformation
+    transformationLayout : '1.1.0',
+
     // architecture components
     fragmentVersion      : '1.4.0',
     lifecycleVersion     : '2.4.0',
