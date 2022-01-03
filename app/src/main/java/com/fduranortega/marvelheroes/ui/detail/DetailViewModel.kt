@@ -3,6 +3,7 @@ package com.fduranortega.marvelheroes.ui.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fduranortega.marvelheroes.domain.GetHeroUseCase
+import com.fduranortega.marvelheroes.utils.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,7 +29,7 @@ class DetailViewModel @Inject constructor(
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             _uiState.update {
-                it.copy(isLoading = true, hero = null, errorMessage = "")
+                it.copy(isLoading = true, hero = null, errorMessage = EMPTY_STRING)
             }
 
             try {
@@ -40,7 +41,7 @@ class DetailViewModel @Inject constructor(
 
             } catch (ioe: IOException) {
                 _uiState.update {
-                    val message = ioe.message ?: ""
+                    val message = ioe.message ?: EMPTY_STRING
                     it.copy(isLoading = false, hero = null, errorMessage = message)
                 }
             }

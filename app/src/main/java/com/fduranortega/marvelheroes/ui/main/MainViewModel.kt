@@ -3,6 +3,7 @@ package com.fduranortega.marvelheroes.ui.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fduranortega.marvelheroes.domain.GetHeroListUseCase
+import com.fduranortega.marvelheroes.utils.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,19 +31,19 @@ class MainViewModel @Inject constructor(
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             _uiState.update {
-                it.copy(isLoading = true, heroList = emptyList(), errorMessage = "")
+                it.copy(isLoading = true, heroList = emptyList(), errorMessage = EMPTY_STRING)
             }
 
             try {
                 heroListUseCase(page).collect { heroList ->
                     _uiState.update {
-                        it.copy(heroList = heroList, isLoading = false, errorMessage = "")
+                        it.copy(heroList = heroList, isLoading = false, errorMessage = EMPTY_STRING)
                     }
                 }
 
             } catch (ioe: IOException) {
                 _uiState.update {
-                    val message = ioe.message ?: ""
+                    val message = ioe.message ?: EMPTY_STRING
                     it.copy(isLoading = false, heroList = emptyList(), errorMessage = message)
                 }
             }

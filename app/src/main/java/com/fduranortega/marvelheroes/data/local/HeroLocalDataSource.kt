@@ -2,6 +2,7 @@ package com.fduranortega.marvelheroes.data.local
 
 import com.fduranortega.marvelheroes.data.model.bo.HeroBO
 import com.fduranortega.marvelheroes.data.model.mapper.toBO
+import com.fduranortega.marvelheroes.data.model.mapper.toHeroExtraRO
 import com.fduranortega.marvelheroes.data.model.mapper.toRO
 import javax.inject.Inject
 
@@ -20,7 +21,9 @@ class HeroLocalDataSourceImpl @Inject constructor(
     }
 
     override suspend fun getHero(id: Int): HeroBO? {
-        return heroDao.getHero(id).toBO()
+        val heroBO = heroDao.getHero(id).toBO()
+        val heroExtraBO = heroDao.getHeroExtra(id).map { it.toBO() }
+        return heroBO.copy(comics = heroExtraBO)
     }
 
     override suspend fun saveHeroList(heroList: List<HeroBO>, page: Int) {
@@ -28,6 +31,6 @@ class HeroLocalDataSourceImpl @Inject constructor(
     }
 
     override suspend fun saveHero(hero: HeroBO) {
-        heroDao.insertHero(hero.toRO())
+        heroDao.insertHeroExtra(hero.comics.toHeroExtraRO(hero.id))
     }
 }

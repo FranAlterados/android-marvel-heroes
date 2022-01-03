@@ -3,6 +3,7 @@ package com.fduranortega.marvelheroes.ui.detail
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.viewModels
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.fduranortega.marvelheroes.data.model.bo.HeroBO
 import com.fduranortega.marvelheroes.databinding.ActivityDetailBinding
+import com.fduranortega.marvelheroes.ui.detail.adapter.HeroExtraInfoAdapter
 import com.github.florent37.glidepalette.BitmapPalette
 import com.github.florent37.glidepalette.GlidePalette
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -36,6 +38,7 @@ class DetailActivity : AppCompatActivity() {
     @get:VisibleForTesting
     internal val viewModel: DetailViewModel by viewModels()
     private lateinit var binding: ActivityDetailBinding
+    private val adapter = HeroExtraInfoAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         onTransformationEndContainerApplyParams(this)
@@ -45,6 +48,7 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         initUiStateCollect()
+        initRecyclerView()
 
         intent.extras?.getParcelable<HeroBO>(HERO_LABEL)?.let {
             bindHero(it)
@@ -57,6 +61,10 @@ class DetailActivity : AppCompatActivity() {
             android.R.id.home -> onBackPressed()
         }
         return true
+    }
+
+    private fun initRecyclerView() {
+        binding.heroExtraInfoRecyclerView.adapter = adapter
     }
 
     private fun bindHero(hero: HeroBO) {
@@ -75,6 +83,15 @@ class DetailActivity : AppCompatActivity() {
                     }.crossfade(true)
             )
             .into(binding.heroImage)
+        adapter.setNumberExtras(hero.numComics)
+        adapter.setData(hero.comics)
+
+        if (hero.numComics == 0) {
+            binding.heroComicTitle.visibility = View.GONE
+        }
+        if (hero.description.isBlank()) {
+            binding.heroDescription.visibility = View.GONE
+        }
     }
 
     private fun initUiStateCollect() {

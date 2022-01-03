@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.fduranortega.marvelheroes.data.model.ro.HeroExtraRO
 import com.fduranortega.marvelheroes.data.model.ro.HeroRO
 
 @Dao
@@ -12,7 +13,10 @@ interface HeroDao {
     suspend fun insertHeroList(heroList: List<HeroRO>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertHero(hero: HeroRO)
+    suspend fun insertHeroExtra(heroExtraList: List<HeroExtraRO>)
+
+    @Query("SELECT * FROM HeroExtraRO WHERE heroId = :id")
+    suspend fun getHeroExtra(id: Int): List<HeroExtraRO>
 
     @Query("SELECT * FROM HeroRO WHERE page = :page")
     suspend fun getHeroList(page: Int): List<HeroRO>

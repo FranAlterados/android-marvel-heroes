@@ -32,7 +32,7 @@ class HeroRepositoryImpl @Inject constructor(
 
     override suspend fun getHero(id: Int) = flow {
         val localHero = heroLocalDataSource.getHero(id)
-        if (localHero != null) {
+        if (localHero != null && localHero.hasDetailInfo()) {
             emit(localHero)
         } else {
             val remoteHero = heroRemoteDataSource.getHero(id)

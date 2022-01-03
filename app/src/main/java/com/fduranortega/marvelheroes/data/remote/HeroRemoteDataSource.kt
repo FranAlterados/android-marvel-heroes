@@ -2,6 +2,8 @@ package com.fduranortega.marvelheroes.data.remote
 
 import com.fduranortega.marvelheroes.data.model.bo.HeroBO
 import com.fduranortega.marvelheroes.data.model.mapper.toBO
+import com.fduranortega.marvelheroes.data.model.mapper.toHeroExtraBO
+import com.fduranortega.marvelheroes.utils.convertHttpToHttps
 import com.skydoves.sandwich.suspendOnError
 import com.skydoves.sandwich.suspendOnException
 import com.skydoves.sandwich.suspendOnSuccess
@@ -35,13 +37,22 @@ class HeroRemoteDataSourceImpl @Inject constructor(
         val response = heroClient.fetchHero(id)
         response
             .suspendOnSuccess {
-                emit(data.toBO().firstOrNull())
+                val heroBO = data.toBO().firstOrNull()
+                val comics = data.data.results.firstOrNull()?.comics
+                if (comics != null && comics.available > 0 && comics.collectionURI.isNotBlank()) {
+                    val extraResponse = heroClient.fetchHeroExtra(comics.collectionURI.convertHttpToHttps())
+                    extraResponse
+                        .suspendOnSuccess {
+                            val extra = this.data.toHeroExtraBO()
+                            emit(heroBO?.copy(comics = extra))
+                        }
+                        .suspendOnError { emit(heroBO) }
+                        .suspendOnException { emit(heroBO) }
+                } else {
+                    emit(heroBO)
+                }
             }
-            .suspendOnError {
-                emit(null)
-            }
-            .suspendOnError {
-                emit(null)
-            }
+            .suspendOnError { emit(null) }
+            .suspendOnException { emit(null) }
     }
 }

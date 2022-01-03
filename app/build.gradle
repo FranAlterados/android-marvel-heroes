@@ -104,6 +104,7 @@ dependencies {
 
     // recyclerView
     implementation "com.github.skydoves:baserecyclerviewadapter:$versions.baseAdapter"
+    implementation "com.facebook.shimmer:shimmer:$versions.shimmer"
 
     // debugging
     implementation "com.jakewharton.timber:timber:$versions.timberVersion"

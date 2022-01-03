@@ -5,6 +5,7 @@ import com.skydoves.sandwich.ApiResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.Url
 
 interface HeroService {
 
@@ -16,4 +17,7 @@ interface HeroService {
 
     @GET("characters/{characterId}")
     suspend fun fetchHero(@Path("characterId") id: Int): ApiResponse<HeroResponseDTO>
+
+    @GET
+    suspend fun fetchHeroExtra(@Url url: String): ApiResponse<HeroResponseDTO>
 }

@@ -9,4 +9,16 @@ data class HeroBO(
     val name: String,
     val description: String,
     val urlImage: String,
+    val comics: List<HeroExtraBO> = emptyList(),
+    val numComics: Int,
+) : Parcelable {
+    fun hasDetailInfo() = comics.isNotEmpty()
+}
+
+@Parcelize
+data class HeroExtraBO(
+    val id: Int,
+    val title: String,
+    val description: String,
+    val urlImage: String,
 ) : Parcelable

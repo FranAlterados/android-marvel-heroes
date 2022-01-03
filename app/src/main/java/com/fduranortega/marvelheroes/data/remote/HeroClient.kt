@@ -22,6 +22,8 @@ class HeroClient @Inject constructor(
             id = id
         )
 
+    suspend fun fetchHeroExtra(url: String): ApiResponse<HeroResponseDTO> = heroService.fetchHeroExtra(url)
+
     companion object {
         private const val PAGING_SIZE = 20
     }
