@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
                 showError(uiState.errorMessage)
             }
             uiState.heroList.isNotEmpty() -> {
-                adapter.setData(uiState.heroList)
+                adapter.submitList(uiState.heroList)
                 if (binding.emptyLabel.isVisible) {
                     binding.emptyLabel.visibility = View.GONE
                 }

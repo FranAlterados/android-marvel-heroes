@@ -2,6 +2,7 @@ package com.fduranortega.marvelheroes.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fduranortega.marvelheroes.data.model.bo.HeroBO
 import com.fduranortega.marvelheroes.domain.GetHeroListUseCase
 import com.fduranortega.marvelheroes.utils.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +24,7 @@ class MainViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
 
+    private var currentList: MutableList<HeroBO> = mutableListOf()
     var page = 0
 
     private var fetchJob: Job? = null
@@ -37,7 +39,8 @@ class MainViewModel @Inject constructor(
             try {
                 heroListUseCase(page).collect { heroList ->
                     _uiState.update {
-                        it.copy(heroList = heroList, isLoading = false, errorMessage = EMPTY_STRING)
+                        currentList.addAll(heroList)
+                        it.copy(heroList = currentList, isLoading = false, errorMessage = EMPTY_STRING)
                     }
                 }
 

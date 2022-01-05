@@ -10,8 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.fduranortega.marvelheroes.data.model.bo.HeroBO
+import com.fduranortega.marvelheroes.data.model.bo.HeroExtraBO
 import com.fduranortega.marvelheroes.databinding.ActivityDetailBinding
 import com.fduranortega.marvelheroes.ui.detail.adapter.HeroExtraInfoAdapter
+import com.fduranortega.marvelheroes.ui.detail.adapter.HeroExtraInfoAdapter.Companion.PLACEHOLDER_ID
+import com.fduranortega.marvelheroes.utils.EMPTY_STRING
 import com.github.florent37.glidepalette.BitmapPalette
 import com.github.florent37.glidepalette.GlidePalette
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -83,8 +86,15 @@ class DetailActivity : AppCompatActivity() {
                     }.crossfade(true)
             )
             .into(binding.heroImage)
-        adapter.setNumberExtras(hero.numComics)
-        adapter.setData(hero.comics)
+        if (hero.comics.isEmpty()) {
+            adapter.submitList(
+                List(hero.numComics) {
+                    HeroExtraBO(PLACEHOLDER_ID, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING)
+                }
+            )
+        } else {
+            adapter.submitList(hero.comics)
+        }
 
         if (hero.numComics == 0) {
             binding.heroComicTitle.visibility = View.GONE
