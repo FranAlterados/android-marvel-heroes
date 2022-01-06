@@ -111,8 +111,10 @@ dependencies {
 
     // unit test
     testImplementation "junit:junit:$versions.junitVersion"
+    implementation "androidx.test:core-ktx:$versions.androidxTest"
     androidTestImplementation "androidx.test.ext:junit:$versions.androidxTestJunit"
     androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espressoVersion"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$versions.mockitoKotlinVersion"
     testImplementation "org.mockito:mockito-inline:$versions.mockitoInlineVersion"
+    testImplementation "org.robolectric:robolectric:$versions.robolectricVersion"
 }
