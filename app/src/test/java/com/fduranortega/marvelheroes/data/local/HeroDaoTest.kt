@@ -2,10 +2,12 @@ package com.fduranortega.marvelheroes.data.local
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.fduranortega.marvelheroes.data.model.bo.HeroBO
-import com.fduranortega.marvelheroes.data.model.bo.HeroExtraBO
 import com.fduranortega.marvelheroes.data.model.mapper.toBO
 import com.fduranortega.marvelheroes.data.model.mapper.toRO
+import com.fduranortega.marvelheroes.data.util.MockUtil.mockHero
+import com.fduranortega.marvelheroes.data.util.MockUtil.mockHeroExtra
+import com.fduranortega.marvelheroes.data.util.MockUtil.mockHeroId
+import com.fduranortega.marvelheroes.data.util.MockUtil.mockHeroList
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
@@ -36,19 +38,12 @@ class HeroDaoTest {
         db.close()
     }
 
-    fun mockHero() = HeroBO(
-        1011334,
-        "3-D Man",
-        "",
-        "https://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784.jpg",
-        emptyList(),
-        12
-    )
+
 
     @Test
     fun insertAndLoadHeroListTest() = runBlocking {
         val mockPage = 0
-        val heroListBO = listOf(mockHero())
+        val heroListBO = mockHeroList()
         heroDao.insertHeroList(heroListBO.toRO(mockPage))
 
         val loadFromDB = heroDao.getHeroList(mockPage)
@@ -60,24 +55,19 @@ class HeroDaoTest {
     @Test
     fun loadHeroTest() = runBlocking {
         val mockPage = 0
-        heroDao.insertHeroList(listOf(mockHero()).toRO(mockPage))
+        heroDao.insertHeroList(mockHeroList().toRO(mockPage))
 
-        val loadFromDB = heroDao.getHero(1011334)
+        val loadFromDB = heroDao.getHero(mockHeroId())
 
         MatcherAssert.assertThat(loadFromDB.toBO(), CoreMatchers.`is`(mockHero()))
     }
 
     @Test
     fun insertAndLoadHeroExtra() = runBlocking {
-        val heroExtraBO = HeroExtraBO(
-            1,
-            "Hero extra title",
-            "Hero extra description",
-            "urlImage"
-        )
+        val heroExtraBO = mockHeroExtra()
         val mockPage = 0
-        heroDao.insertHeroList(listOf(mockHero()).toRO(mockPage))
-        heroDao.insertHeroExtra(listOf(heroExtraBO.toRO(1011334)))
+        heroDao.insertHeroList(mockHeroList().toRO(mockPage))
+        heroDao.insertHeroExtra(listOf(heroExtraBO.toRO(mockHeroId())))
 
         val loadFromDB = heroDao.getHeroExtra(1011334)
 
