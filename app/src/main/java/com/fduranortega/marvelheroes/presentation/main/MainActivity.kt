@@ -3,13 +3,14 @@ package com.fduranortega.marvelheroes.presentation.main
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
-import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fduranortega.marvelheroes.databinding.ActivityMainBinding
+import com.fduranortega.marvelheroes.domain.model.HeroBO
 import com.fduranortega.marvelheroes.presentation.main.adapter.HeroAdapter
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -21,7 +22,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    @get:VisibleForTesting
     internal val viewModel: MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
     private val adapter = HeroAdapter()
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initRecyclerView()
-        initUiStateCollect()
+        observeStates()
     }
 
     private fun initRecyclerView() {
@@ -48,39 +48,50 @@ class MainActivity : AppCompatActivity() {
 
         paginator = RecyclerViewPaginator(
             recyclerView = binding.recyclerView,
-            isLoading = { viewModel.uiState.value.isLoading },
-            loadMore = { viewModel.fetchMoreHeroes() },
+            isLoading = { viewModel.viewState.value is MainViewState.ShowLoading },
+            loadMore = { viewModel.dispatch(MainEvent.FetchMoreHeroes) },
             onLast = { false }
         )
 
-        viewModel.fetchMoreHeroes()
+        viewModel.dispatch(MainEvent.FetchMoreHeroes)
     }
 
-    private fun initUiStateCollect() {
+    private fun observeStates() {
         lifecycleScope.launch {
-            viewModel.uiState
-                .collect {
-                    processUiState(it)
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.viewState.collect {
+                    onStateChanged(it)
                 }
+            }
         }
     }
 
-    private fun processUiState(uiState: MainUiState) {
-        binding.loading.visibility = if (uiState.isLoading) View.VISIBLE else View.GONE
-        when {
-            uiState.errorMessage.isNotBlank() -> {
-                showError(uiState.errorMessage)
-            }
-            uiState.heroList.isNotEmpty() -> {
-                adapter.submitList(uiState.heroList)
-                if (binding.emptyLabel.isVisible) {
-                    binding.emptyLabel.visibility = View.GONE
-                }
-            }
+    private fun onStateChanged(viewState: MainViewState) {
+        when (viewState) {
+            MainViewState.ShowLoading -> showLoading(true)
+            is MainViewState.ShowHeroList -> showHeroList(viewState.heroList)
+            MainViewState.ShowEmptyList -> showEmptyList()
+            is MainViewState.ShowError -> showError(viewState.message)
         }
+    }
+
+    private fun showLoading(visible: Boolean) {
+        binding.loading.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
+    private fun showHeroList(heroList: List<HeroBO>) {
+        showLoading(false)
+        adapter.submitList(heroList)
+        binding.emptyLabel.visibility = View.GONE
+    }
+
+    private fun showEmptyList() {
+        showLoading(false)
+        binding.emptyLabel.visibility = View.VISIBLE
     }
 
     private fun showError(errorMessage: String) {
+        showLoading(false)
         Snackbar.make(
             findViewById(binding.root.id),
             errorMessage,

@@ -5,9 +5,10 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
-import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
 import com.fduranortega.marvelheroes.databinding.ActivityDetailBinding
 import com.fduranortega.marvelheroes.domain.model.HeroBO
@@ -37,7 +38,6 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
-    @get:VisibleForTesting
     internal val viewModel: DetailViewModel by viewModels()
     private lateinit var binding: ActivityDetailBinding
     private val adapter = HeroExtraInfoAdapter()
@@ -49,12 +49,12 @@ class DetailActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        initUiStateCollect()
+        observeStates()
         initRecyclerView()
 
         intent.extras?.getParcelable<HeroBO>(HERO_LABEL)?.let {
             bindHero(it)
-            viewModel.fetchHero(it.id)
+            viewModel.dispatch(DetailEvent.FetchHero(it.id))
         }
     }
 
@@ -69,7 +69,30 @@ class DetailActivity : AppCompatActivity() {
         binding.heroExtraInfoRecyclerView.adapter = adapter
     }
 
+    private fun observeStates() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.viewState.collect {
+                    onStateChanged(it)
+                }
+            }
+        }
+    }
+
+    private fun onStateChanged(viewState: DetailViewState) {
+        when (viewState) {
+            DetailViewState.ShowLoading -> showLoading(true)
+            is DetailViewState.ShowHero -> bindHero(viewState.heroBO)
+            is DetailViewState.ShowError -> showError(viewState.message)
+        }
+    }
+
+    private fun showLoading(visible: Boolean) {
+        binding.loading.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
     private fun bindHero(hero: HeroBO) {
+        showLoading(false)
         binding.heroName.text = hero.name
         binding.heroDescription.text = hero.description
         Glide.with(binding.root.context)
@@ -103,27 +126,8 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun initUiStateCollect() {
-        lifecycleScope.launch {
-            viewModel.uiState
-                .collect {
-                    processUiState(it)
-                }
-        }
-    }
-
-    private fun processUiState(uiState: DetailUiState) {
-        when {
-            uiState.errorMessage.isNotBlank() -> {
-                showError(uiState.errorMessage)
-            }
-            uiState.hero != null -> {
-                bindHero(uiState.hero)
-            }
-        }
-    }
-
     private fun showError(errorMessage: String) {
+        showLoading(false)
         Snackbar.make(
             findViewById(binding.root.id),
             errorMessage,
