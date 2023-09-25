@@ -1,9 +1,9 @@
 package com.fduranortega.marvelheroes.data.local
 
-import com.fduranortega.marvelheroes.data.model.bo.HeroBO
 import com.fduranortega.marvelheroes.data.model.mapper.toBO
 import com.fduranortega.marvelheroes.data.model.mapper.toHeroExtraRO
 import com.fduranortega.marvelheroes.data.model.mapper.toRO
+import com.fduranortega.marvelheroes.domain.model.HeroBO
 import javax.inject.Inject
 
 interface HeroLocalDataSource {

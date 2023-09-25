@@ -1,4 +1,4 @@
-package com.fduranortega.marvelheroes.ui.detail
+package com.fduranortega.marvelheroes.presentation.detail
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,11 +9,11 @@ import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.fduranortega.marvelheroes.data.model.bo.HeroBO
-import com.fduranortega.marvelheroes.data.model.bo.HeroExtraBO
 import com.fduranortega.marvelheroes.databinding.ActivityDetailBinding
-import com.fduranortega.marvelheroes.ui.detail.adapter.HeroExtraInfoAdapter
-import com.fduranortega.marvelheroes.ui.detail.adapter.HeroExtraInfoAdapter.Companion.PLACEHOLDER_ID
+import com.fduranortega.marvelheroes.domain.model.HeroBO
+import com.fduranortega.marvelheroes.domain.model.HeroExtraBO
+import com.fduranortega.marvelheroes.presentation.detail.adapter.HeroExtraInfoAdapter
+import com.fduranortega.marvelheroes.presentation.detail.adapter.HeroExtraInfoAdapter.Companion.PLACEHOLDER_ID
 import com.fduranortega.marvelheroes.utils.EMPTY_STRING
 import com.github.florent37.glidepalette.BitmapPalette
 import com.github.florent37.glidepalette.GlidePalette
@@ -23,7 +23,6 @@ import com.skydoves.transformationlayout.TransformationCompat
 import com.skydoves.transformationlayout.TransformationCompat.onTransformationEndContainerApplyParams
 import com.skydoves.transformationlayout.TransformationLayout
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint

@@ -1,11 +1,11 @@
 package com.fduranortega.marvelheroes.data.model.mapper
 
-import com.fduranortega.marvelheroes.data.model.bo.HeroBO
-import com.fduranortega.marvelheroes.data.model.bo.HeroExtraBO
 import com.fduranortega.marvelheroes.data.model.dto.HeroResponseDTO
 import com.fduranortega.marvelheroes.data.model.dto.HeroThumbnailDTO
 import com.fduranortega.marvelheroes.data.model.ro.HeroExtraRO
 import com.fduranortega.marvelheroes.data.model.ro.HeroRO
+import com.fduranortega.marvelheroes.domain.model.HeroBO
+import com.fduranortega.marvelheroes.domain.model.HeroExtraBO
 import com.fduranortega.marvelheroes.utils.EMPTY_STRING
 import com.fduranortega.marvelheroes.utils.convertHttpToHttps
 

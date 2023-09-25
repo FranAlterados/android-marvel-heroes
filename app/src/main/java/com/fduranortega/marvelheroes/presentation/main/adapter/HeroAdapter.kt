@@ -1,4 +1,4 @@
-package com.fduranortega.marvelheroes.ui.main.adapter
+package com.fduranortega.marvelheroes.presentation.main.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.fduranortega.marvelheroes.data.model.bo.HeroBO
 import com.fduranortega.marvelheroes.databinding.RowHeroBinding
-import com.fduranortega.marvelheroes.ui.detail.DetailActivity
+import com.fduranortega.marvelheroes.domain.model.HeroBO
+import com.fduranortega.marvelheroes.presentation.detail.DetailActivity
 import com.github.florent37.glidepalette.BitmapPalette
 import com.github.florent37.glidepalette.GlidePalette
 

@@ -1,4 +1,4 @@
-package com.fduranortega.marvelheroes.ui.main
+package com.fduranortega.marvelheroes.presentation.main
 
 import android.os.Bundle
 import android.view.View
@@ -10,13 +10,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fduranortega.marvelheroes.databinding.ActivityMainBinding
-import com.fduranortega.marvelheroes.ui.main.adapter.HeroAdapter
+import com.fduranortega.marvelheroes.presentation.main.adapter.HeroAdapter
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.skydoves.baserecyclerviewadapter.RecyclerViewPaginator
 import com.skydoves.transformationlayout.onTransformationStartContainer
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint

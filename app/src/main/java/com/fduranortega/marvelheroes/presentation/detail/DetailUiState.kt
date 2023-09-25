@@ -1,6 +1,6 @@
-package com.fduranortega.marvelheroes.ui.detail
+package com.fduranortega.marvelheroes.presentation.detail
 
-import com.fduranortega.marvelheroes.data.model.bo.HeroBO
+import com.fduranortega.marvelheroes.domain.model.HeroBO
 import com.fduranortega.marvelheroes.utils.EMPTY_STRING
 
 data class DetailUiState(

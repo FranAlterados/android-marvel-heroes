@@ -1,4 +1,4 @@
-package com.fduranortega.marvelheroes.ui.detail
+package com.fduranortega.marvelheroes.presentation.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
