@@ -5,11 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.fduranortega.marvelheroes.domain.GetHeroUseCase
 import com.fduranortega.marvelheroes.utils.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -33,12 +33,13 @@ class DetailViewModel @Inject constructor(
             }
 
             try {
-                heroUseCase(heroId).collect { heroBO ->
-                    _uiState.update {
-                        it.copy(hero = heroBO, isLoading = false)
+                viewModelScope.launch(Dispatchers.IO) {
+                    heroUseCase(heroId).collect { heroBO ->
+                        _uiState.update {
+                            it.copy(hero = heroBO, isLoading = false)
+                        }
                     }
                 }
-
             } catch (ioe: IOException) {
                 _uiState.update {
                     val message = ioe.message ?: EMPTY_STRING

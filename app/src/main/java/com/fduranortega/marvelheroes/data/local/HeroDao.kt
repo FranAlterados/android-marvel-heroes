@@ -10,17 +10,17 @@ import com.fduranortega.marvelheroes.data.model.ro.HeroRO
 @Dao
 interface HeroDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertHeroList(heroList: List<HeroRO>)
+    fun insertHeroList(heroList: List<HeroRO>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertHeroExtra(heroExtraList: List<HeroExtraRO>)
+    fun insertHeroExtra(heroExtraList: List<HeroExtraRO>)
 
     @Query("SELECT * FROM HeroExtraRO WHERE heroId = :id")
-    suspend fun getHeroExtra(id: Int): List<HeroExtraRO>
+    fun getHeroExtra(id: Int): List<HeroExtraRO>
 
     @Query("SELECT * FROM HeroRO WHERE page = :page")
-    suspend fun getHeroList(page: Int): List<HeroRO>
+    fun getHeroList(page: Int): List<HeroRO>
 
     @Query("SELECT * FROM HeroRO WHERE id = :id")
-    suspend fun getHero(id: Int): HeroRO
+    fun getHero(id: Int): HeroRO
 }

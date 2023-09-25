@@ -1,5 +1,6 @@
 package com.fduranortega.marvelheroes.data.model.ro
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
@@ -24,7 +25,7 @@ data class HeroRO(
 )
 data class HeroExtraRO(
     @PrimaryKey val id: Int,
-    val heroId: Int,
+    @ColumnInfo(name = "heroId", index = true) val heroId: Int,
     val title: String,
     val description: String,
     val urlImage: String,
