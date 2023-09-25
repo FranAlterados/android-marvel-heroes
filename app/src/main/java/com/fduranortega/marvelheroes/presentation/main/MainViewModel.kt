@@ -1,9 +1,9 @@
-package com.fduranortega.marvelheroes.ui.main
+package com.fduranortega.marvelheroes.presentation.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fduranortega.marvelheroes.data.model.bo.HeroBO
 import com.fduranortega.marvelheroes.domain.GetHeroListUseCase
+import com.fduranortega.marvelheroes.domain.model.HeroBO
 import com.fduranortega.marvelheroes.utils.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

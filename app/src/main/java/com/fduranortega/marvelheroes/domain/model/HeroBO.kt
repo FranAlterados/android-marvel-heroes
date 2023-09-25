@@ -1,4 +1,4 @@
-package com.fduranortega.marvelheroes.data.model.bo
+package com.fduranortega.marvelheroes.domain.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

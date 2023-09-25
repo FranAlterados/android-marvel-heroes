@@ -1,8 +1,8 @@
 package com.fduranortega.marvelheroes.data.remote
 
-import com.fduranortega.marvelheroes.data.model.bo.HeroBO
 import com.fduranortega.marvelheroes.data.model.mapper.toBO
 import com.fduranortega.marvelheroes.data.model.mapper.toHeroExtraBO
+import com.fduranortega.marvelheroes.domain.model.HeroBO
 import com.fduranortega.marvelheroes.utils.convertHttpToHttps
 import com.skydoves.sandwich.suspendOnError
 import com.skydoves.sandwich.suspendOnException

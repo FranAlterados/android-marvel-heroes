@@ -1,4 +1,4 @@
-package com.fduranortega.marvelheroes.ui.detail.adapter
+package com.fduranortega.marvelheroes.presentation.detail.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.fduranortega.marvelheroes.data.model.bo.HeroExtraBO
 import com.fduranortega.marvelheroes.databinding.RowHeroExtraInfoBinding
+import com.fduranortega.marvelheroes.domain.model.HeroExtraBO
 
 class HeroExtraInfoAdapter : ListAdapter<HeroExtraBO, HeroExtraInfoAdapter.HeroExtraInfoViewHolder>(diffUtil) {
 

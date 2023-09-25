@@ -1,7 +1,7 @@
 package com.fduranortega.marvelheroes.data.util
 
-import com.fduranortega.marvelheroes.data.model.bo.HeroBO
-import com.fduranortega.marvelheroes.data.model.bo.HeroExtraBO
+import com.fduranortega.marvelheroes.domain.model.HeroBO
+import com.fduranortega.marvelheroes.domain.model.HeroExtraBO
 
 object MockUtil {
 
