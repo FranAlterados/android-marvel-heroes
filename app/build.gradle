@@ -3,7 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
-    id 'dagger.hilt.android.plugin'
+    id 'com.google.dagger.hilt.android'
 }
 
 apply from: "$rootDir/dependencies.gradle"
@@ -93,9 +93,6 @@ dependencies {
     // hilt
     implementation "com.google.dagger:hilt-android:$versions.hiltCoreVersion"
     kapt "com.google.dagger:hilt-compiler:$versions.hiltCoreVersion"
-    kapt "androidx.hilt:hilt-compiler:$versions.hiltVersion"
-    androidTestImplementation "com.google.dagger:hilt-android-testing:$versions.hiltCoreVersion"
-    kaptAndroidTest "com.google.dagger:hilt-compiler:$versions.hiltCoreVersion"
 
     // glide
     implementation "com.github.bumptech.glide:glide:$versions.glideVersion"

@@ -6,11 +6,11 @@ import com.fduranortega.marvelheroes.data.model.bo.HeroBO
 import com.fduranortega.marvelheroes.domain.GetHeroListUseCase
 import com.fduranortega.marvelheroes.utils.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -37,10 +37,16 @@ class MainViewModel @Inject constructor(
             }
 
             try {
-                heroListUseCase(page).collect { heroList ->
-                    _uiState.update {
-                        currentList.addAll(heroList)
-                        it.copy(heroList = currentList, isLoading = false, errorMessage = EMPTY_STRING)
+                viewModelScope.launch(Dispatchers.IO) {
+                    heroListUseCase(page).collect { heroList ->
+                        _uiState.update {
+                            currentList.addAll(heroList)
+                            it.copy(
+                                heroList = currentList,
+                                isLoading = false,
+                                errorMessage = EMPTY_STRING
+                            )
+                        }
                     }
                 }
 
