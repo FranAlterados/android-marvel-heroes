@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "eb4fc48ed233beacb34b54b0fe202963",
+    "identityHash": "951db80db9657922853ea908f426ea1c",
     "entities": [
       {
         "tableName": "HeroRO",
@@ -46,10 +46,10 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": false,
           "columnNames": [
             "id"
-          ],
-          "autoGenerate": false
+          ]
         },
         "indices": [],
         "foreignKeys": []
@@ -90,12 +90,22 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": false,
           "columnNames": [
             "id"
-          ],
-          "autoGenerate": false
+          ]
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_HeroExtraRO_heroId",
+            "unique": false,
+            "columnNames": [
+              "heroId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_HeroExtraRO_heroId` ON `${TABLE_NAME}` (`heroId`)"
+          }
+        ],
         "foreignKeys": [
           {
             "table": "HeroRO",
@@ -114,7 +124,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'eb4fc48ed233beacb34b54b0fe202963')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '951db80db9657922853ea908f426ea1c')"
     ]
   }
 }

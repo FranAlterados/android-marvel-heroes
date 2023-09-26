@@ -1,10 +1,9 @@
 package com.fduranortega.marvelheroes.data.repository
 
 import com.fduranortega.marvelheroes.data.local.HeroLocalDataSource
-import com.fduranortega.marvelheroes.data.model.bo.HeroBO
 import com.fduranortega.marvelheroes.data.remote.HeroRemoteDataSource
+import com.fduranortega.marvelheroes.domain.model.HeroBO
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 

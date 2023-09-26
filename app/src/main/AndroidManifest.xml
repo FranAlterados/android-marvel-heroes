@@ -13,10 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MarvelHeroes">
         <activity
-            android:name=".ui.detail.DetailActivity"
+            android:name=".presentation.detail.DetailActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".presentation.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
