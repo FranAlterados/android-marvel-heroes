@@ -16,13 +16,12 @@ import java.io.IOException
 import javax.inject.Inject
 
 sealed class DetailViewState {
-    data object ShowLoading : DetailViewState()
-    data class ShowHero(val heroBO: HeroBO) : DetailViewState()
+    data class ShowHero(val loading: Boolean, val heroBO: HeroBO?) : DetailViewState()
     data class ShowError(val message: String) : DetailViewState()
 }
 
 sealed class DetailEvent {
-    class FetchHero(val heroId: Int) : DetailEvent()
+    class FetchHero(val hero: HeroBO) : DetailEvent()
 }
 
 @HiltViewModel
@@ -30,24 +29,26 @@ class DetailViewModel @Inject constructor(
     private val heroUseCase: GetHeroUseCase
 ) : ViewModel() {
 
-    private val mutableViewState = MutableStateFlow<DetailViewState>(DetailViewState.ShowLoading)
+    private val mutableViewState = MutableStateFlow<DetailViewState>(
+        DetailViewState.ShowHero(true, null)
+    )
     val viewState: StateFlow<DetailViewState> = mutableViewState.asStateFlow()
 
     fun dispatch(event: DetailEvent) {
         when (event) {
-            is DetailEvent.FetchHero -> fetchHero(event.heroId)
+            is DetailEvent.FetchHero -> fetchHero(event.hero)
         }
     }
 
-    private fun fetchHero(heroId: Int) {
+    private fun fetchHero(hero: HeroBO) {
         viewModelScope.launch {
-            mutableViewState.update { DetailViewState.ShowLoading }
+            mutableViewState.update { DetailViewState.ShowHero(true, hero) }
             try {
                 viewModelScope.launch(Dispatchers.IO) {
-                    heroUseCase(heroId).collect { heroBO ->
+                    heroUseCase(hero.id).collect { heroBO ->
                         heroBO?.let {
                             mutableViewState.update {
-                                DetailViewState.ShowHero(heroBO)
+                                DetailViewState.ShowHero(false, heroBO)
                             }
                         } ?: throw IOException("Error fetching hero")
                     }

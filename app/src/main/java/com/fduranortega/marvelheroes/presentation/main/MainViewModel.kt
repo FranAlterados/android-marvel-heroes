@@ -16,14 +16,16 @@ import java.io.IOException
 import javax.inject.Inject
 
 sealed class MainViewState {
-    data object ShowLoading : MainViewState()
-    data class ShowHeroList(val heroList: List<HeroBO>) : MainViewState()
-    data object ShowEmptyList : MainViewState()
+    data class ShowHeroList(val loading: Boolean, val heroList: List<HeroBO>) : MainViewState()
+    data class OnHeroClicked(val hero: HeroBO) : MainViewState()
+    object ShowEmptyList : MainViewState()
     data class ShowError(val message: String) : MainViewState()
 }
 
 sealed class MainEvent {
-    data object FetchMoreHeroes : MainEvent()
+    object OnResume : MainEvent()
+    object FetchMoreHeroes : MainEvent()
+    class OnClickHero(val hero: HeroBO) : MainEvent()
 }
 
 @HiltViewModel
@@ -31,7 +33,9 @@ class MainViewModel @Inject constructor(
     private val heroListUseCase: GetHeroListUseCase
 ) : ViewModel() {
 
-    private val mutableViewState = MutableStateFlow<MainViewState>(MainViewState.ShowLoading)
+    private val mutableViewState = MutableStateFlow<MainViewState>(
+        MainViewState.ShowHeroList(true, emptyList())
+    )
     val viewState: StateFlow<MainViewState> = mutableViewState.asStateFlow()
 
     private var currentList: MutableList<HeroBO> = mutableListOf()
@@ -40,12 +44,20 @@ class MainViewModel @Inject constructor(
     fun dispatch(event: MainEvent) {
         when (event) {
             MainEvent.FetchMoreHeroes -> fetchMoreHeroes()
+            is MainEvent.OnClickHero -> onClickHero(event.hero)
+            MainEvent.OnResume -> onResume()
+        }
+    }
+
+    private fun onResume() {
+        mutableViewState.update {
+            MainViewState.ShowHeroList(false, currentList)
         }
     }
 
     private fun fetchMoreHeroes() {
         viewModelScope.launch {
-            mutableViewState.update { MainViewState.ShowLoading }
+            mutableViewState.update { MainViewState.ShowHeroList(true, currentList) }
             try {
                 viewModelScope.launch(Dispatchers.IO) {
                     heroListUseCase(page).collect { heroList ->
@@ -54,7 +66,7 @@ class MainViewModel @Inject constructor(
                             if (currentList.isEmpty()) {
                                 MainViewState.ShowEmptyList
                             } else {
-                                MainViewState.ShowHeroList(currentList)
+                                MainViewState.ShowHeroList(false, currentList)
                             }
                         }
                     }
@@ -67,6 +79,12 @@ class MainViewModel @Inject constructor(
                 }
             }
             page++
+        }
+    }
+
+    private fun onClickHero(hero: HeroBO) {
+        mutableViewState.update {
+            MainViewState.OnHeroClicked(hero)
         }
     }
 }
